@@ -186,3 +186,5 @@ class TestFandQView(APITestCase):
         self.assertEqual(FandQ.objects.count(), 0)
 
 
+class TestProductView(APITestCase):
+    pass
