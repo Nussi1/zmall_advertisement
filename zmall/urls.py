@@ -3,6 +3,7 @@ from django.urls import path, include, re_path
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
+from websocket.views import MessageSendAPIView
 
 
 urlpatterns = [
@@ -36,7 +37,7 @@ urlpatterns = [
 		path('add/', views.ClaimCreateView.as_view()),
 		path('detail/<int:pk>', views.ClaimDetailView.as_view()),
 	])),
-
+	path('message/', MessageSendAPIView.as_view()),
 
 
 ]
