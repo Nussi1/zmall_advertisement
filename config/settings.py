@@ -10,18 +10,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5b$rxaofubm1xs9c@=2f5wok6%tv7=ekg1$h%t9(ue=cg32g7f'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
 AUTH_USER_MODEL = 'user.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -31,10 +32,12 @@ INSTALLED_APPS = [
     'django.contrib.gis',
 
     'rest_framework',
+    # 'channels_redis',
     'rest_framework_swagger',
     'drf_yasg',
     'user',
     'zmall',
+    'websocket',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +70,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+ASGI_APPLICATION = 'config.asgi.application'
+
+# CHANNEL_LAYERS = {
+#     'default':{
+#         'BACKEND':'channels.layers.InMemoryChannelLayer'
+#     }
+# }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [('0.0.0.0', 6379)],
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

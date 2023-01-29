@@ -3,6 +3,7 @@ from zmall.serializers import CategorySerializer, SubcategorySerializer, Adverti
 from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from .filters import ProductFilter
 from django.contrib.gis.geos import Point
 
 point = Point(42.8746, 74.5698)
@@ -15,8 +16,6 @@ class CategoryCreateView(generics.CreateAPIView):
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
-    search_fields = ('name')
 
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -61,6 +60,10 @@ class ProductCreateView(generics.CreateAPIView):
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend, SearchFilter, OrderingFilter)
+    filterset_class = ProductFilter
+    search_fields = ['title']
+    ordering_fields = ['price']
     my_model = Product(location=point)
 
 
